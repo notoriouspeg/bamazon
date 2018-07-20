@@ -1,12 +1,16 @@
 Hi! I created a Bamazon application for homework assigned in my U of M Coding Bootcamp / Trilogy.  
 
-Here are the instructions.  I have successfully coded steps 1-6.  I am consistently getting an error after step 6. I will keep working on it until the application runs all the way through without errors.  BTW - the error states:  (node:370948) UnhandledPromiseRejectionWarning: ReferenceError: res is not defined
+The instructions are below. 
+
+First, a few note:
+
+I have successfully coded steps 1-6.  I am consistently getting an error after step 6. I will keep working on it until the application runs all the way through without errors.  BTW - the error states:  (node:370948) UnhandledPromiseRejectionWarning: ReferenceError: res is not defined
     at C:\Users\pmickel\Documents\codingBootcamp\homeworks\bamazon\bamazonCustomer.js:71:43. 
     
 However, I am not using Promise in this application. I have been researching this error for 2-3 hours now and made many changes but the error persists. I however, will persist one more time than the error and will solve it!
 
 
-Challenge #1: Customer View (Minimum Requirement)
+INSTRUCTIONS -- Challenge #1: Customer View (Minimum Requirement)
 
 1. Create a MySQL Database called bamazon.
 2. Then create a Table inside of that database called products.
