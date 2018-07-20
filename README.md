@@ -2,7 +2,7 @@ Hi! I created a Bamazon application for homework assigned in my U of M Coding Bo
 
 The instructions are below. 
 
-First, a few note:
+First, a few notes:
 
 I have successfully coded steps 1-6.  I am consistently getting an error after step 6. I will keep working on it until the application runs all the way through without errors.  BTW - the error states:  (node:370948) UnhandledPromiseRejectionWarning: ReferenceError: res is not defined
     at C:\Users\pmickel\Documents\codingBootcamp\homeworks\bamazon\bamazonCustomer.js:71:43. 
