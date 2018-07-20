@@ -1,18 +1,16 @@
 Hi! I created a Bamazon application for homework assigned in my U of M Coding Bootcamp / Trilogy.  
 
-The instructions are below. 
+The MVP requirements are listed below. 
 
-First, a few notes:
+I have attached several screenshots to walk you through my application.
 
-I have successfully coded steps 1-6.  I am consistently getting an error after step 6. I will keep working on it until the application runs all the way through without errors.  BTW - the error states:  (node:370948) UnhandledPromiseRejectionWarning: ReferenceError: res is not defined
-    at C:\Users\pmickel\Documents\codingBootcamp\homeworks\bamazon\bamazonCustomer.js:71:43. 
-    
-However, I am not using Promise in this application. I have been researching this error for 2-3 hours now and made many changes but the error persists. I however, will persist one more time than the error and will solve it!
+[Link to SCR 1](bamazon_screenshot1.JPG) - Displays item ID, product name, department, price and stock quantity. Prompts the customer to provide the item ID that they would like to buy. 
 
-Here is a link to a screenshot that shows the full list of product items and inventory plus user prompts for requesting an item and requesting to choose quantity of the desired item.
+[Link to SCR 2](bamazon_screenshot2.JPG) - Displays customer answer to item ID prompt and adds a new prompt that asks how many of those items the customer wants to buy. 
 
-[Link to screenshot 1](bamazon_app_screenshot1.JPG)
+[Link to SCR 3](bamazon_screenshot3.JPG) - Displays a message stating “insufficient quantity” when customer requests more of an item than is available in stock. 
 
+[Link to SCR 4](bamazon_screenshot4.JPG) - Displays the total cost of the item quantity and product name chosen by the customer. Displays updated stock quantity number after subtracting what the customer is purchasing. 
 
 INSTRUCTIONS -- Challenge #1: Customer View (Minimum Requirement)
 

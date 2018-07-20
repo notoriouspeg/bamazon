@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require('cli-table');
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -7,104 +9,68 @@ var connection = mysql.createConnection({
     user: "root",
     password: "root",
     database: "bamazon_db"
-});
+})
 
+var checkAndBuy2 = function() {
+    connection.query('SELECT * FROM products', function(err, res) {
+        //CREATES A NEW TABLE IN THE COOL CLI VIEW 
+        var table = new Table({
+            head: ['ID', 'Product Name', 'Department', 'Price', 'Stock Quantity']
+        });
 
-connection.connect(function (err) {
-    // Throw error if it errors
-    if (err) {
-        console.log(err);
-    }
-    else {
-        showProducts();
-    }
-});
-
-// showProducts selects all data from the table
-function showProducts() {
-    connection.query('SELECT * FROM products', function (err, res) {
-        if (err) {
-            console.log(err);
+        //DISPLAYS ALL ITEMS FOR SALE 
+        console.log("HERE ARE ALL THE ITEMS AVAILABLE FOR SALE: ");
+        console.log("===========================================");
+        for (var i = 0; i < res.length; i++) {
+            table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price.toFixed(2), res[i].stock_quality]);
         }
-        else {
-            console.log('Welcome to Bamazon! Here are our products:')
-            for (i = 0; i < res.length; i++) {
-                console.log(' Item ID: ' + res[i].item_id + '|' + ' Product Name: ' + res[i].product_name + '|' + ' Department: ' + res[i].department_name + '|' + ' Price: ' + '$' + res[i].price + '|' + 'Quantity left: ' + res[i].stock_quality + '')
+        console.log("-----------------------------------------------");
+        //LOGS THE COOL TABLE WITH ITEMS IN FOR PURCHASE. 
+        console.log(table.toString());
+        inquirer.prompt([{
+            name: "itemId",
+            type: "input",
+            message: "What is the item ID you would like to buy?",
+            validate: function(value) {
+                if (isNaN(value) == false) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
-            console.log('=================================================');
-
-            placeOrder();
-        }
-    })
-}
-//Ask customer to choose an item by ID
-
-function placeOrder() {
-    inquirer
-        .prompt([
-            {
-                name: "requestedItem",
-                type: "input",
-                message: "Please chooose one of the IDs",
+        }, {
+            name: "Quantity",
+            type: "input",
+            message: "How many of this item would you like to buy?",
+            validate: function(value) {
+                if (isNaN(value) == false) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
-        ])
-        .then(function (answer) {
-
-            console.log(answer.requestedItem);
-
-            howMany(answer.requestedItem);
-        }
-        )
-}
-//Ask customer to choose how many items they want
-
-function howMany(itemSelected) {
-
-    inquirer
-        .prompt([
-            {
-                name: "requestedAmount",
-                type: "input",
-                message: "How many would you like?"
-            }])
-        .then(function (ans) {
-            var whatToBuy = (ans.requestedItem) - 1;
-            var howMuchToBuy = parseInt(ans.requestedAmount);
-            var grandTotal = parseFloat(((res[whatToBuy].Price) * howMuchToBuy).toFixed(2));
-
-            //check if there are enough items in stock
-            if (res[whatToBuy].stock_quality >= howMuchToBuy) {
-                //after purchase, updates quantity in Products
-                connection.query("UPDATE Products SET ? WHERE ?", [
-                    { stock_quality: (res[whatToBuy].stock_quality - howMuchToBuy) },
-                    { item_id: ans.id }
-                ], function (err, result) {
-                    if (err) throw err;
-                    console.log("Success! Your total is $" + grandTotal.toFixed(2) + ". Your item(s) will be shipped to you in 3-5 business days.");
+        }]).then(function(answer) {
+            var chosenId = answer.itemId - 1
+            var chosenProduct = res[chosenId]
+            var chosenQuantity = answer.Quantity
+            if (chosenQuantity < res[chosenId].stock_quality) {
+                console.log("Your total for " + "(" + answer.Quantity + ")" + " - " + res[chosenId].product_name + " is: " + res[chosenId].price.toFixed(2) * chosenQuantity);
+                connection.query("UPDATE products SET ? WHERE ?", [{
+                    stock_quality: res[chosenId].stock_quality - chosenQuantity
+                }, {
+                    item_id: res[chosenId].item_id
+                }], function(err, res) {
+                    //console.log(err);
+                    checkAndBuy2();
                 });
 
-               
             } else {
-                console.log("Sorry, there's not enough in stock!");
+                console.log("Sorry, insufficient quantity at this time. All we have is " + res[chosenId].stock_quality + " in our Inventory.");
+                checkAndBuy2();
             }
-
-            reprompt();
         })
+    })
 }
 
-        //   asks if they would like to purchase another item
-          function reprompt(){
-            inquirer.prompt([{
-              type: "confirm",
-              name: "reply",
-              message: "Would you like to purchase another item?"
-            }]).then(function(ans){
-              if(ans.reply){
-                showProducts();
-              } else{
-                console.log("See you soon!");
-              }
-            });
-          }
 
-
+checkAndBuy2();
