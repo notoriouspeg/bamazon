@@ -1,0 +1,27 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "bamazon app",
+  "main": "bamazonCustomer.js",
+  "dependencies": {
+    "inquirer": "^6.0.0",
+    "mysql": "^2.16.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notoriouspeg/bamazon.git"
+  },
+  "keywords": [
+    "bamazon"
+  ],
+  "author": "Peg M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/notoriouspeg/bamazon/issues"
+  },
+  "homepage": "https://github.com/notoriouspeg/bamazon#readme"
+}
