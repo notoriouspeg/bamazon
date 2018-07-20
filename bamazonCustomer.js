@@ -9,7 +9,6 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
-var numberOfProductTypes = 0;
 
 connection.connect(function (err) {
     // Throw error if it errors
@@ -30,7 +29,7 @@ function showProducts() {
         else {
             console.log('Welcome to Bamazon! Here are our products:')
             for (i = 0; i < res.length; i++) {
-                console.log('Item ID:' + res[i].item_id + ' Product Name: ' + res[i].product_name + ' Price: ' + '$' + res[i].price + '(Quantity left: ' + res[i].stock_quality + ')')
+                console.log(' Item ID: ' + res[i].item_id + '|' + ' Product Name: ' + res[i].product_name + '|' + ' Department: ' + res[i].department_name + '|' + ' Price: ' + '$' + res[i].price + '|' + 'Quantity left: ' + res[i].stock_quality + '')
             }
             console.log('=================================================');
 
@@ -38,7 +37,7 @@ function showProducts() {
         }
     })
 }
-//Ask user to choose an item by ID
+//Ask customer to choose an item by ID
 
 function placeOrder() {
     inquirer
@@ -57,6 +56,8 @@ function placeOrder() {
         }
         )
 }
+//Ask customer to choose how many items they want
+
 function howMany(itemSelected) {
 
     inquirer
@@ -66,27 +67,44 @@ function howMany(itemSelected) {
                 type: "input",
                 message: "How many would you like?"
             }])
-        .then(function(answer) {
-            var chosenId = answer.requestedItem - 1
-            var chosenProduct = res[chosenId]
-            var chosenQuantity = answer.requestedAmount
-            if (chosenQuantity < res[chosenId].stock_quality) {
-                console.log("Your total for " + "(" + answer.requestedAmount + ")" + " - " + res[chosenId].ProductName + " is: " + res[chosenId].Price.toFixed(2) * chosenQuantity);
-                connection.query("UPDATE products SET ? WHERE ?", [{
-                    stock_quality: res[chosenId].stock_quality - chosenQuantity
-                }, {
-                    id: res[chosenId].id
-                }], function(err, res) {
-                    //console.log(err);
-                    showProducts();
+        .then(function (ans) {
+            var whatToBuy = (ans.requestedItem) - 1;
+            var howMuchToBuy = parseInt(ans.requestedAmount);
+            var grandTotal = parseFloat(((res[whatToBuy].Price) * howMuchToBuy).toFixed(2));
+
+            //check if there are enough items in stock
+            if (res[whatToBuy].stock_quality >= howMuchToBuy) {
+                //after purchase, updates quantity in Products
+                connection.query("UPDATE Products SET ? WHERE ?", [
+                    { stock_quality: (res[whatToBuy].stock_quality - howMuchToBuy) },
+                    { item_id: ans.id }
+                ], function (err, result) {
+                    if (err) throw err;
+                    console.log("Success! Your total is $" + grandTotal.toFixed(2) + ". Your item(s) will be shipped to you in 3-5 business days.");
                 });
 
+               
             } else {
-                console.log("Sorry, insufficient Quantity at this time. All we have is " + res[chosenId].stock_quality + " in our Inventory.");
-                showProducts();
+                console.log("Sorry, there's not enough in stock!");
             }
-        })
-    }
 
-// showProducts();
+            reprompt();
+        })
+}
+
+        //   asks if they would like to purchase another item
+          function reprompt(){
+            inquirer.prompt([{
+              type: "confirm",
+              name: "reply",
+              message: "Would you like to purchase another item?"
+            }]).then(function(ans){
+              if(ans.reply){
+                showProducts();
+              } else{
+                console.log("See you soon!");
+              }
+            });
+          }
+
 
