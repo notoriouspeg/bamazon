@@ -9,6 +9,10 @@ I have successfully coded steps 1-6.  I am consistently getting an error after s
     
 However, I am not using Promise in this application. I have been researching this error for 2-3 hours now and made many changes but the error persists. I however, will persist one more time than the error and will solve it!
 
+Here is a link to a screenshot that shows the full list of product items and inventory plus user prompts for requesting an item and requesting to choose quantity of the desired item.
+
+[Link to screenshot 1](bamazon_app_screenshot1.JPG)
+
 
 INSTRUCTIONS -- Challenge #1: Customer View (Minimum Requirement)
 
